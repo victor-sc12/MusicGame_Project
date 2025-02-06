@@ -9,12 +9,14 @@ from music import MusicProcess as Mp
 class Tkinter(tk.Tk):
     def __init__(self):
         super().__init__()
+        self.main_frame = ttk.Frame(self)
+        self.main_frame.grid(pady='15')
         self.music = Mp()
         self.current_music = self.music.get_objsong(1)
         self.current_music_audio = self.current_music.get_song()
-        fv = Fv(self, self.current_music)
+        fv = Fv(self.main_frame, self.current_music)
         fv.grid()
-        rp = Rp(self, self.current_music_audio)
+        rp = Rp(self.main_frame, self.current_music_audio)
         rp.grid()
 
 

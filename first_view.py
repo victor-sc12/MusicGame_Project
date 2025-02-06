@@ -18,7 +18,7 @@ class FirstView(ttk.Frame):
 
         # Definición del frame donde se ubicaran los 'Entry Widgets' para los datos de entrada:
         self.input_frame = ttk.Frame(self)
-        self.input_frame.grid()
+        self.input_frame.grid(padx='10')
 
         # Definición del label donde se ubicarán los mensajes de alerta
         self.msg_label = ttk.Label(self, text='')
