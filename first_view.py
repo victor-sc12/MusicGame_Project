@@ -34,6 +34,10 @@ class FirstView(ttk.Frame):
         self.label_title = ttk.Label(self, text=self.artist_name)
         self.label_title.grid()
 
+        # Definición del Button widget para cambiar de canción:
+        self.validation_entry = False # Var control to put the button
+        self.changesong_button = ttk.Button(self, text='Next Song')
+
         # Declaración de la función que coloca los Entry Widgets según el nombre de la canción
         self.put_spaces()
 
@@ -45,15 +49,20 @@ class FirstView(ttk.Frame):
         # self.char_values_entry = [v for v in self.char_values_entry if v != '']
         if self.char_values_entry == self.char_values:
             self.msg_label.configure(text='Well Done')
+            self.validation_entry = True
             #ttk.Label(self.input_frame, text="Well Done").grid(row = 1)
         else:
             self.msg_label.configure(text='Error. Try again')
             #ttk.Label(self.input_frame, text="Error. Try again").grid(row=1)
         print(self.char_values_entry)
         print(self.char_values)
+        print(self.validation_entry)
         self.char_values_entry = []
         self.char_values = []
         self.put_spaces()
+
+        if self.validation_entry:
+            self.changesong_button.grid(row = 3)
 
     def put_spaces(self):
         i,j = 0,0

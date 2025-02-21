@@ -37,11 +37,10 @@ class Reproductor(ttk.Frame):
         self.load_music()
         if not self.time_running:
             self.increment_time()
-        mixer.music.play(-1)
+        mixer.music.play(loops=0)
 
     def increment_time(self):
         self.time_running = True
-        minutes, seconds = '0', '0'
         music_time = self.music_time.get()
         if music_time != self.music_time_info:
             minutes, seconds = music_time.split(":")
@@ -51,5 +50,7 @@ class Reproductor(ttk.Frame):
             else:
                 seconds = 0
                 minutes = int(minutes) + 1
+        else:
+            minutes, seconds = map(int, self.music_time_info.split(":"))
         self.music_time.set(f"{minutes:02d}:{seconds:02d}")
         self.after(1000, self.increment_time)
