@@ -29,7 +29,7 @@ class MusicFrame(ttk.Frame):
 
         # Instanciamiento de la clase FirstView:
         self.firstView = Fv(self, self.current_music)
-        self.firstView.grid()
+        self.firstView.grid(sticky="nsew")
 
         # Instanciamiento de la clase Reproductor
         rp = Rp(self, self.current_music_audio)
@@ -42,6 +42,9 @@ class MusicFrame(ttk.Frame):
         # Change page button:
         chage_button = ttk.Button(self, text='Check Results', command=lambda: controller.switch_frame(FrontPage))
 
+        # Expandir this class:
+        self.columnconfigure(0, weight=1)
+
     def update_obj(self):
         #print("Si funciono: " + str(self.index))
         # self.validation = True
@@ -52,10 +55,10 @@ class MusicFrame(ttk.Frame):
         self.current_music_audio = self.current_music.get_song()
 
         self.firstView = Fv(self, self.current_music)
-        self.firstView.grid(row = 0)
+        self.firstView.grid(row = 0, sticky="nsew")
 
         rp = Rp(self, self.current_music_audio)
-        rp.grid(row = 1)
+        rp.grid(row = 1, pady=10)
 
 
     def generador_lista(self):
@@ -73,12 +76,14 @@ class FrontPage(ttk.Frame):
         init_button = ttk.Button(self, text='Iniciar', command=lambda: controller.switch_frame(MusicFrame))
         init_button.grid()
 
+        self.columnconfigure(0, weight=1)
+
 
 class Tkinter(tk.Tk):
     def __init__(self):
         super().__init__()
         main_frame = ttk.Frame(self)
-        main_frame.grid(pady='15')
+        main_frame.grid(sticky="nsew", padx=20)
         main_frame.grid_rowconfigure(0, weight=1)
         main_frame.grid_columnconfigure(0, weight=1)
 
@@ -87,9 +92,11 @@ class Tkinter(tk.Tk):
         for F in (FrontPage, MusicFrame):
             frame = F(main_frame, self)
             self.frames[F] = frame
-            frame.grid(row=0, column=0)
+            frame.grid(row=0, column=0, sticky="nsew")
 
         self.switch_frame(FrontPage)
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
 
     def switch_frame(self, frame):
         game_page = self.frames[frame]

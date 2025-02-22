@@ -28,6 +28,10 @@ class Reproductor(ttk.Frame):
         # Variable de control para la correcta ejucución de 'increment_time'
         self.time_running = False
 
+        # Expand this class:
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+
     def load_music(self):
         mixer.music.load(self.music)
         mixer.music.set_volume(0.3)
