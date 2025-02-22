@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-from music import MusicProcess as Mp
 from PIL import Image, ImageTk
 
 class FirstView(ttk.Frame):
@@ -13,67 +12,50 @@ class FirstView(ttk.Frame):
         self.artist_name = self.music.get_artist()
         self.song_name = self.music.get_name()
 
-        self.char_values = [] # lista para almacenar los char de songname
-        self.char_values_entry = [] # lista para los valores de entrada
-
         # Definición del frame donde se ubicaran los 'Entry Widgets' para los datos de entrada:
         self.input_frame = ttk.Frame(self)
         self.input_frame.grid(padx='10')
+        self.input_frame.columnconfigure(0, weight=1)
+        self.input_frame.rowconfigure(0, weight=1)
 
-        # Definición del label donde se ubicarán los mensajes de alerta
-        self.msg_label = ttk.Label(self, text='')
-        self.msg_label.grid(row=1)
+        # StringVars y Entry widgtes que gestionaran los valores ingresados:
+        self.song_name_value = tk.StringVar(value='Put the song name here')
+        self.artist_name_value = tk.StringVar(value='Put the artist name here')
+        self.song_name_entry = ttk.Entry(self.input_frame, textvariable=self.song_name_value)
+        self.song_name_entry.grid(column=0, row=0, sticky="ew")
+        self.artist_name_entry = ttk.Entry(self.input_frame, textvariable=self.artist_name_value)
+        self.artist_name_entry.grid(column=0, row=1, sticky="ew")
+
+        # Un diccionario que también permitirá gestionar validaciones:
+        self.entrys = {self.song_name_entry: self.song_name_value, self.artist_name_entry: self.artist_name_value}
 
         # Definición del Button widget para procesar el dato ingresado
         self.boton = ttk.Button(self, text="Comprobar", command=self.process_entry)
-        self.boton.grid(row=2)
+        self.boton.grid()
 
         # Colocación de los atributos img, artistname dentro del frame principal
         self.label_img = ttk.Label(self, image=self.music_image)
         self.label_img.grid()
-        self.label_title = ttk.Label(self, text=self.artist_name)
-        self.label_title.grid()
 
         # Definición del Button widget para cambiar de canción:
-        self.validation_entry = False # Var control to put the button
         self.changesong_button = ttk.Button(self, text='Next Song')
 
-        # Declaración de la función que coloca los Entry Widgets según el nombre de la canción
-        self.put_spaces()
+        # Acá se pone esto porque se pretende que esta clase Frame se expanda a lo largo de la pantalla:
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+
+    def validar_entry(self, value, entry_widget):
+        if self.entrys[entry_widget].get().upper() != value.upper():
+            self.entrys[entry_widget].set('Your entry data is incorrect. Try again.')
+            entry_widget.configure(textvariable=self.entrys[entry_widget])
+            return False
+        else:
+            entry_widget.configure(textvariable=self.entrys[entry_widget])
+            return True
 
     def process_entry(self):
-        i = 0
-        for values in self.char_values_entry:
-            self.char_values_entry[i] = values.get()
-            i+=1
-        # self.char_values_entry = [v for v in self.char_values_entry if v != '']
-        if self.char_values_entry == self.char_values:
-            self.msg_label.configure(text='Well Done')
-            self.validation_entry = True
-            #ttk.Label(self.input_frame, text="Well Done").grid(row = 1)
-        else:
-            self.msg_label.configure(text='Error. Try again')
-            #ttk.Label(self.input_frame, text="Error. Try again").grid(row=1)
-        print(self.char_values_entry)
-        print(self.char_values)
-        print(self.validation_entry)
-        self.char_values_entry = []
-        self.char_values = []
-        self.put_spaces()
+        song_name_entry = self.validar_entry(self.song_name, self.song_name_entry)
+        artist_name_entry = self.validar_entry(self.artist_name, self.artist_name_entry)
 
-        if self.validation_entry:
-            self.changesong_button.grid(row = 3)
-
-    def put_spaces(self):
-        i,j = 0,0
-        print(j)
-        for char in self.song_name:
-            if char !=' ':
-                self.char_values.append(char)
-                self.char_values_entry.append(tk.StringVar())
-                ttk.Entry(self.input_frame, width=5, textvariable=self.char_values_entry[j]).grid(row=0, column=i)
-                #print(j, self.char_values_entry[j])
-                j+=1
-            else:
-                ttk.Label(self.input_frame, width=5).grid(row=0, column=i)
-            i += 1
+        if song_name_entry and artist_name_entry:
+            self.changesong_button.grid()

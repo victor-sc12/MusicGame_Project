@@ -5,6 +5,9 @@ from tkinter import ttk
 from tkinter.constants import HORIZONTAL
 from ventana import set_dpi_awareness as vista_ventana
 from music import MusicProcess as Mp
+import pygame.mixer as mixer
+
+vista_ventana()
 
 class MusicFrame(ttk.Frame):
     def __init__(self, conteiner, controller):
@@ -42,6 +45,9 @@ class MusicFrame(ttk.Frame):
     def update_obj(self):
         #print("Si funciono: " + str(self.index))
         # self.validation = True
+
+        mixer.music.stop()
+
         self.current_music = next(self.generador)
         self.current_music_audio = self.current_music.get_song()
 
